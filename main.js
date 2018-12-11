@@ -37,7 +37,9 @@ document.addEventListener("click", function(event) {
         }
     }
 });
+/* Helper functions */
 
+/* Determines operations precedence order. Returns true if top of stack operation has higher or equal precedence to operator*/
 function orderPrecedence(stack, operator) {
     if(stack[stack.length - 1] === operator) {
         return true;
@@ -48,7 +50,7 @@ function orderPrecedence(stack, operator) {
     }
     return false;
 }
-
+/* Applies operation */
 function applyOp(value1, value2, operator) {
     if(operator === "+") {
         return value2 + value1;
@@ -60,15 +62,33 @@ function applyOp(value1, value2, operator) {
         return value2/value1;
     }
 }
-
+/* Parses strings mathematical expressions to an array */
+function stringToExpression(string) {
+    let array = string.split("");
+    let expression = [];
+    let temp = "";
+    let counter = 0;
+    while(array.length > 0) {
+        counter++;
+        if(array[0] !== "X" && array[0] !== "+" && array[0] !== "/" && array[0] !== "-") {
+            temp += array.shift();
+        } else {
+            expression.push(temp);
+            expression.push(array.shift());
+            temp = "";
+        }
+    }
+    expression.push(temp);
+    return expression;
+}
+/* Uses the Shunting-Yard algorithm to evaluate in-order mathematical expressions. Returns final the final result of the expression */
 function evaluateExpression(string) {
-    let expression = string.split("");
+    let expression = stringToExpression(string);
     for(let i = 0; i < expression.length; i++) {
         if(expression[i] !== "X" && expression[i] !== "+" && expression[i] !== "-" && expression[i] !== "/") {
             expression[i] = Number(expression[i]);
         }
     }
-
     /* Stacks used by the algorithm */
     let stackValue = [];
     let stackOperator = [];
