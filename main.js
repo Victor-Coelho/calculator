@@ -4,6 +4,7 @@ document.addEventListener("click", function(event) {
     if(event.target.matches(".grid-cells")) {
         if(event.target.matches(".btn1")) {
             inputBox.setAttribute("value", inputBox.getAttribute("value")+"1");
+            inputBox.value = inputBox.defaultValue;
         } else if(event.target.matches(".btn2")) {
             inputBox.setAttribute("value", inputBox.getAttribute("value")+"2");
         } else if(event.target.matches(".btn3")) {
@@ -31,12 +32,22 @@ document.addEventListener("click", function(event) {
         } else if(event.target.matches(".btnDivide")) {
             inputBox.setAttribute("value", inputBox.getAttribute("value")+"/");
         } else if(event.target.matches(".btnClear")) {
-            console.log("CLEAR");
+            inputBox.setAttribute("value", "");
+            inputBox.value = "";
         } else if(event.target.matches(".btnEqual")) {
-            console.log("SINAL DE IGUAL");
+            let result = evaluateExpression(inputBox.getAttribute("value"));
+            inputBox.setAttribute("value", result);
         }
     }
 });
+
+document.addEventListener("keydown", function(event) {
+    if(event.keyCode === 13) {
+        let result = evaluateExpression(event.target.value);
+        inputBox.setAttribute("value", result);
+        inputBox.value = inputBox.defaultValue;
+    }
+})
 /* Helper functions */
 
 /* Determines operations precedence order. Returns true if top of stack operation has higher or equal precedence to operator*/
